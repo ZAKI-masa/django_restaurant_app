@@ -1,0 +1,18 @@
+{% extends './base.html' %}
+
+{% block content %}
+    <h1>お店情報の{{object|yesno:"更新,作成"}}</h1>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">
+            {{object|yesno:"更新,作成"}}
+            <!-- <p>formがからなら作成そうでないなら更新</p> -->
+        </button>
+    </form>
+
+    <div>
+        <a href="Javascript:history.back()">&lt;戻る</a>
+    </div>
+    
+{% endblock %}

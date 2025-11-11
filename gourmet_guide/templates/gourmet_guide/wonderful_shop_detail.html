@@ -1,0 +1,18 @@
+{% extends './base.html' %}
+
+{% block content %}
+    <h1>{{shop.name}}</h1>
+    
+    <div>
+        <p>{{shop.category.name}}</p>
+        <p>{{shop.address}}</p>
+    </div>
+    <div>
+        <a href="{% url 'gourmet_guide:index' %}">一覧へ戻る</a>
+        <a class="btn btn-warning m-2" href="{% url 'gourmet_guide:update' shop.pk %}">編集</a>
+        <a class="btn btn-danger m-2" href="{% url 'gourmet_guide:delete' shop.pk %}">削除</a>
+    </div>
+    {{ coordinates }}
+
+    <iframe src='https://maps.google.co.jp/maps?output=embed&q={{coordinates}}&z=16' allowfullscreen="" width="1000px" height="300px"></iframe>
+{% endblock %}

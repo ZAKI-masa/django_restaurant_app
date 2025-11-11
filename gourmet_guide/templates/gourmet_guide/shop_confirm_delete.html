@@ -1,0 +1,15 @@
+{% extends './base.html' %}
+
+{% block content %}
+    <h1>お店情報の削除確認</h1>
+    <p>{{object.name}}を本当に削除しますか？</p>
+    <form action="" method="post">
+        {% csrf_token %}
+        <button type="submit" >削除</button>
+    </form>
+
+    <div>
+        <a href="Javascript:history.back()">&lt;戻る</a>
+    </div>
+    
+{% endblock %}
