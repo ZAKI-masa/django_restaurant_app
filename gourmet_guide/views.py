@@ -5,9 +5,14 @@ from django.views import generic
 #genericとは
 
 from .models import Category, Shop
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 import requests
 import urllib
+from django.core.exceptions import PermissionDenied
+from .forms import ShopCreateForm 
+
+
 
 
 class IndexView(generic.ListView):
@@ -54,15 +59,35 @@ class DetailView(generic.DetailView):
         return context
 
 
-class CreateView(generic.edit.CreateView):
+class CreateView(LoginRequiredMixin,generic.edit.CreateView):
     model=Shop
-    fields = "__all__"#ショップが持ってる登録できる情報全て
+    form_class = ShopCreateForm # fieldsをこれに変更
+    # フォームデータを取得し、データベースに保存するなどの操作を行う
+    def form_valid(self,form):
+        # authorに今ログインしてきたユーザー名を代入
+        form.instance.author = self.request.user
 
-class UpdateView(generic.edit.UpdateView):
+        # .form_valid()で保存し、success_urlで指定した場所へリダイレクトする super()で親クラスのform_validメソッドを呼び出す 親クラス＝generic.edit.CreateView
+        return super(CreateView, self).form_valid(form)
+     
+
+
+
+class UpdateView(LoginRequiredMixin,generic.edit.UpdateView):
     model=Shop
-    fields = "__all__"
+    fields = ['name', 'address', 'category','image'] 
+    def dispatch(self,request,*args,**kwargs):
+        # 現在の表示データのデータを取得
+        obj=self.get_object() # ページ取得
+        if obj.author != self.request.user:
+            # エラーの場合、以下メッセージを表示
+            raise permissionDenied("You do not have permission to edit.")
+        # 親クラスのdispatchが呼ばれ、リクエスト（getとか）に応じて処理がされる
+        return super(UpdateView,self).dispatch(request,*args,**kwargs) # 親クラス(UpdateView)のdispatchメソッドを呼び出す
 
-class DeleteView(generic.DeleteView):
+
+
+class DeleteView(LoginRequiredMixin,generic.DeleteView):
     model=Shop
     # reverse_lazyの引数に表示したいページのnameを指定
     success_url=reverse_lazy("gourmet_guide:index")

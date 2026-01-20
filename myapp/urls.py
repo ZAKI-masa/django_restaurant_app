@@ -16,14 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
-
 from django.views.generic import RedirectView
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('gourmet_guide/', include('gourmet_guide.urls')),
-
+    path('accounts/',include('accounts.urls')),
+    # django.contrib.auth.urls ⇦ 認証用のライブラリ
+    path('accounts/',include('django.contrib.auth.urls')),
     path('', RedirectView.as_view(url='gourmet_guide/')),
 
 ]
+if settings.DEBUG:
+
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

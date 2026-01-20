@@ -32,7 +32,8 @@ class Shop(models.Model):
     name = models.CharField(max_length=255)
 
     address = models.CharField(max_length=255)
-
+    # 画像pathを保存するためのフィールド
+    image = models.ImageField(upload_to='images', null=True)
     
 
     author = models.ForeignKey(

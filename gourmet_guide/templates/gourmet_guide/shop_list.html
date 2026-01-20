@@ -1,16 +1,18 @@
-{% extends './base.html' %}
+{% extends 'layout.html' %}
 
 {% block content %}
     <h1>お店一覧</h1>
+    {% if user.is_authenticated %}
     <div>
         <a class="btn btn-primary mb-3" href="{% url 'gourmet_guide:create' %}">新規登録</a>
     </div>
-   
+   {% endif %}
       <table class="table table-striped table-hover">
         <tr >
             <th>店名</th>
             <th>カテゴリー</th>
             <th>住所</th>
+            <th>イメージ</th>
         </tr>
       
         {% for shop in object_list %}
@@ -20,6 +22,7 @@
             </td>
             <td>{{shop.category.name}}</td>
             <td>{{shop.address}}</td>
+            <td><img src="/media/{{ shop.image }}" alt="" width="100px"></td>
         </tr>
 
         {% endfor %}

@@ -11,9 +11,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,12 +37,15 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     "gourmet_guide.apps.GourmetGuideConfig",
+    "accounts.apps.AccountsConfig",
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
 ]
 
 MIDDLEWARE = [
@@ -55,7 +63,7 @@ ROOT_URLCONF = 'myapp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,6 +74,8 @@ TEMPLATES = [
         },
     },
 ]
+# ↓ログインした後に一覧ページにリダイレクト
+LOGIN_REDIRECT_URL='/'
 
 WSGI_APPLICATION = 'myapp.wsgi.application'
 
@@ -73,22 +83,26 @@ WSGI_APPLICATION = 'myapp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# データベース設定
+
 DATABASES = {
+
     'default': {
 
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': env('DB_ENGINE'),
 
-        'NAME': 'gourmet_db', 
+        'NAME': env('DB_NAME'),
 
-        'USER': 'root', 
+        'USER': env('DB_USER'),
 
-        'PASSWORD': 'root', 
+        'PASSWORD': env('DB_PASSWORD'),
 
- 	    'HOST': '/Applications/MAMP/tmp/mysql/mysql.sock',
+        'HOST': env('DB_HOST'),
 
-        'PORT': '8889'  
+        'PORT': env('DB_PORT'),
 
     }
+
 }
 
 
@@ -132,3 +146,12 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+## ブラウザからアクセスする際のアドレス
+
+MEDIA_URL = '/media/'
+
+## 画像ファイルを読み込みにいく先のフォルダ
+
+MEDIA_ROOT = BASE_DIR/"media"

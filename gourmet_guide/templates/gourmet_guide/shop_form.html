@@ -1,8 +1,8 @@
-{% extends './base.html' %}
+{% extends 'layout.html' %}
 
 {% block content %}
     <h1>お店情報の{{object|yesno:"更新,作成"}}</h1>
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{form.as_p}}
         <button type="submit">

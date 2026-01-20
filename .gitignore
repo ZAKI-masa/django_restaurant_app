@@ -1,0 +1,23 @@
+# 環境変数（機密情報）
+
+.env
+
+
+
+# Mac特有
+
+.DS_Store
+
+
+
+# Python
+
+__pycache__/
+
+
+
+
+
+db.sqlite3
+
+media/

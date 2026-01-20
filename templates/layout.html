@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopリスト</title>
+    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css' >
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-sm navbar-dark fixed-top">
+        <div class="container">
+          <a class='navbar-brand' href='{% url "gourmet_guide:index" %}'>おすすめご飯やさん</a>
+          <ul class="navbar-nav">
+            <!-- {# ユーザーがログインしているかを判定 #} -->
+            {% if user.is_authenticated %}
+            <li class="nav-time">
+                <!-- # ログイン中: ユーザー名を表示  -->
+                <span class="navbar-text">{{user}}-</span>
+            </li>
+            <li>
+                <form action="{% url 'logout' %}" method="post" style="display: inline;">
+                    {% csrf_token %}
+
+                    <button type="submit" class="btn btn-link nav-link logout">Logout</button>
+                </form>
+            </li>
+            {% else %}
+            <!-- {# 未ログイン: ログインリンクを表示 #} -->
+             <li>
+                <a href="{% url 'login' %}" class="login nav-link">Login</a>
+             </li>
+             <li>
+                <a href="{% url 'accounts:signup' %}" class="signup nav-link">Sign up</a>
+             </li>
+            {% endif %}
+
+
+          </ul>
+        </div>
+    </nav>
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+      
+</body>
+</html>
